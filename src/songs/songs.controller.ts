@@ -5,15 +5,25 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Inject,
+  Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
+import { Connection } from '../../dist/common/constant/connection';
 
 @Controller('songs')
 export class SongsController {
-  constructor(private SongsService: SongsService) {}
+  constructor(
+    private SongsService: SongsService,
+    @Inject('CONNECTION')
+    private connection: Connection,
+  ) {
+    console.log(this.connection);
+  }
 
   // Create Song
   @Post()
@@ -39,8 +49,14 @@ export class SongsController {
 
   // Find By ID
   @Get(':id')
-  findOne() {
-    return 'Get One Song';
+  findOne(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: number,
+  ) {
+    return `Get One Song On Id: ${typeof id}`;
   }
 
   // Update By ID
