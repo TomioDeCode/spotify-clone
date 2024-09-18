@@ -12,6 +12,8 @@ import { Artist } from './artist/artist.entity';
 import { User } from './users/user.entity';
 import { Playlist } from './playlists/playlist.entity';
 import { PlaylistModule } from './playlists/playlists.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './users/users.module';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -30,6 +32,8 @@ const proConfig = { port: 4000 };
     }),
     SongsModule,
     PlaylistModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
@@ -51,10 +55,6 @@ export class AppModule implements NestModule {
     console.log('dB Name ', dataSource.driver.database);
   }
   configure(consumer: MiddlewareConsumer) {
-    // consumer.apply(LoggerMiddleware).forRoutes('songs'); Options 1
-    // consumer
-    //   .apply(LoggerMiddleware)
-    //   .forRoutes({ path: 'songs', method: RequestMethod.POST }); Options 2
-    consumer.apply(LoggerMiddleware).forRoutes(SongsController); // Options 3
+    consumer.apply(LoggerMiddleware).forRoutes(SongsController);
   }
 }
